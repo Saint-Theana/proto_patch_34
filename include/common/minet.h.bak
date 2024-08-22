@@ -1,0 +1,61 @@
+#include "proto/packet_head.pb.h"
+#include <string.h>
+#include <vector>
+#include <map>
+#include <atomic>
+#include <thread>
+namespace common {
+
+  namespace minet {
+      struct KcpSession;
+    struct KcpConnRateLimiter;
+    struct KcpServerMgrBase;
+    enum Status {
+      STATUS_NONE_0 = 0x0,
+      STATUS_INIT_4 = 0x1,
+      STATUS_RUNNING = 0x2,
+      STATUS_STOPPED = 0x3,
+      STATUS_ERROR_2 = 0x4,
+    };
+    struct KcpConnMgrBase{
+      
+      int (**_vptr_KcpConnMgrBase)(...);
+      uint32_t listen_port_;
+      uint32_t recv_buf_len_;
+      uint32_t send_buf_len_;
+      uint32_t timeout_sec_;
+      uint32_t mtu_;
+      uint32_t wnd_size_;
+      uint32_t kcp_log_mask_;
+      std::atomic<double> connect_limit_per_second_per_ip_;
+      std::atomic<unsigned int> max_conn_num_;
+      uint32_t wait_snd_check_interval_;
+      uint32_t wait_snd_max_;
+      std::weak_ptr<KcpServerMgrBase> kcp_server_mgr_wtr_;
+      std::atomic<Status> state_;
+      boost::asio::io_context ioc_;
+      boost::asio::ip::udp::socket udp_socket_;
+      boost::asio::ip::udp::endpoint udp_remote_endpoint_;
+      char udp_data_[1048576];
+      boost::asio::deadline_timer kcp_timer_;
+      std::map<unsigned int,std::shared_ptr<common::minet::KcpSession>,std::less<unsigned int>,std::allocator<std::pair<unsigned int const,std::shared_ptr<common::minet::KcpSession> > > > session_map_;
+      std::thread network_thread_;
+    };
+      typedef std::shared_ptr<google::protobuf::Message> MessagePtr;
+  
+      struct Packet{
+          int (**_vptr_Packet)(...);
+          uint16_t cmd_id;
+          char a1;
+          char a2;
+          char a3;
+          char a4;
+          char a5;
+          char a6;
+          proto::PacketHead head_;
+          std::string recv_str;
+          MessagePtr proto_ptr;
+      };
+  }
+}
+
