@@ -13,6 +13,8 @@
 ## Q: How to use?</br>
 ## A: see (this project)[https://github.com/Saint-Theana/projecthook]</br>
 
+## Note: proto patch plus packet reporter for gameserver: see (this project)[https://github.com/Saint-Theana/proto_patch_34_extension]</br>
+
 ## Note: this patch must be applied to game gate node dbgate at the same time,or it wont work.</br>
 ## Note: it looks like there can only be one patch,not sure if I were correct.</br>
 

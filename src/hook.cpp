@@ -36,6 +36,7 @@
 #undef STORE_APP_FUNC
 
 static bool is_gate_=false;
+static bool is_game_=false;
 
 bool is_gate(){
   if(is_gate_){
@@ -47,6 +48,22 @@ bool is_gate(){
   dlclose(handle);
   if(f){
       is_gate_=true;
+      return true;
+  }
+  return false;
+}
+
+
+bool is_game(){
+  if(is_game_){
+      return true;
+  }
+  void *handle = dlopen(NULL, RTLD_NOW);
+  void *f = dlsym(handle, "_ZN13GameserverAppC1Ev");
+  
+  dlclose(handle);
+  if(f){
+      is_game_=true;
       return true;
   }
   return false;
@@ -119,10 +136,6 @@ uint32_t convert_set_time_req_packet(common::minet::Packet *_this,char* buff,uin
     
     len=len+(size-body_len);
   //  printHex(buff,len);
-    INFO("body_len: %d",body_len);
-    INFO("head_len: %d",head_len);
-    INFO("head_len: %d",req.game_time());
-    INFO("head_len: %d",req.client_game_time());
     return len;
 }
 
