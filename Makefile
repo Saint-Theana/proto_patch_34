@@ -1,32 +1,36 @@
+CURRENT_DIR := $(shell pwd)
+SRC_DIR = $(CURRENT_DIR)/src
+BUILD_DIR = $(CURRENT_DIR)/build
 CXX := g++
 # Compiler flags
-CXXFLAGS := -Wall -Wno-narrowing -fPIC -std=c++20 -Iinclude -Isrc/proto
+CXXFLAGS := -w -Wall -Wno-narrowing -fPIC -std=c++11 -Iinclude -Isrc/proto
 
-# Directories
-SRCDIR := src
-BUILDDIR := build
-LIBDIR := lib
 
 # Files to compile
-SRC_FILES = $(shell find $(SRC_DIR) -name '*.cpp')
-OBJ_FILES = $(SRC_FILES:.cpp=.o)
+
+OBJS = $(patsubst $(SRC_DIR)%.cpp,$(BUILD_DIR)%.o,$(shell find $(CURRENT_DIR)/src/ -name "*.cpp"))
+
 
 # Output shared library name
-TARGET = lib/libhook.so
+TARGET = $(BUILD_DIR)/lib/libhook.so
 
+all: $(TARGET)
+	@echo "all done"
+
+$(OBJS): $(BUILD_DIR)%.o: $(SRC_DIR)%.cpp
+	@mkdir -p $(dir $@)
+	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 
 # Rule to build object files
-$(TARGET): $(OBJ_FILES)
-	$(CXX)  -shared -fPIC -o $(TARGET) $(OBJ_FILES)  -Llib -ldl -ljsoncpp -lZydis 
+$(TARGET): $(OBJS)
+	@mkdir -p $(dir $@)
+	$(CXX)  -shared -fPIC -o $(TARGET) $(OBJS)  -Llib -ldl -lZydis 
 
-# Rule to build shared library
-%.o: %.cpp
-	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 # Clean command
 clean:
-	rm -f $(OBJ_FILES) $(TARGET)
+	rm -f $(OBJS) $(TARGET)
 
 # Phony targets
 .PHONY: all clean

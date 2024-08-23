@@ -1,7 +1,7 @@
 
 #include <map>
 #include <string>
-std::map<int,int> getCMDIdReverseConvertMap(){
+
     static std::map<int,int> boobs ={
         {
             1131,1124
@@ -6454,10 +6454,12 @@ std::map<int,int> getCMDIdReverseConvertMap(){
             3525,3546
         }
     };
+    
+std::map<int,int> getCMDIdReverseConvertMap(){
     return boobs;
 }
 
-std::map<int,int> getCMDIdConvertMap(){
+
     static std::map<int,int> ass ={
         {
             1124,1131
@@ -12910,11 +12912,13 @@ std::map<int,int> getCMDIdConvertMap(){
             3546,3525
         }
     };
+
+std::map<int,int> getCMDIdConvertMap(){
     return ass;
 }
 
 
-std::map<std::string,int> getCMDIdMap() {
+
     static std::map<std::string,int> shit ={
     {
       "AbilityChangeNotify",
@@ -21562,5 +21566,6 @@ std::map<std::string,int> getCMDIdMap() {
     }
     
     };
+std::map<std::string,int> getCMDIdMap() {
     return shit;
 }

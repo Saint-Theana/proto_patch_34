@@ -127,7 +127,6 @@ uint32_t convert_set_time_req_packet(common::minet::Packet *_this,char* buff,uin
     new_req.SerializeToArray(tmp_buff, size);
     
     std::memcpy(buff+2+2+2+4+head_len, tmp_buff, size);
-    std::memcpy(buff+2+2+2+4+head_len, tmp_buff, size);
     *body_len_ptr=__builtin_bswap32(size);
     
     *(buff+2+2+2+4+head_len+size)=0x89;
